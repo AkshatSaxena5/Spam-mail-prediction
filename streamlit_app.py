@@ -9,6 +9,8 @@ with open('tfidf_vectorizer.pkl', 'rb') as f:
     vectorizer = pickle.load(f)
 with open('svm_model.pkl', 'rb') as f:
     model = pickle.load(f)
+with open('label_encoder.pkl', 'rb') as f:
+    lbl_encoder = pickle.load(f)
 
 # Preprocessing function — NO word_tokenize, NO punkt
 def preprocess(text):
