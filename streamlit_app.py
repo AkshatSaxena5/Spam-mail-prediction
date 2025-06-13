@@ -10,12 +10,12 @@ with open('tfidf_vectorizer.pkl', 'rb') as f:
 with open('svm_model.pkl', 'rb') as f:
     model = pickle.load(f)
 
-# Preprocessing function without punkt/tokenizer
+# Preprocessing function without NLTK tokenizers
 def preprocess(text):
     text = text.lower()
     text = re.sub(r"\d+", "", text)
     text = text.translate(str.maketrans("", "", string.punctuation))
-    tokens = text.split()                          # ← simple whitespace split
+    tokens = text.split()                 # simple whitespace split
     stops = set(stopwords.words("english"))
     filtered = [w for w in tokens if w not in stops]
     return " ".join(filtered)
@@ -31,6 +31,7 @@ if st.button("Predict"):
         cleaned = preprocess(user_input)
         vect = vectorizer.transform([cleaned]).toarray()
         pred = model.predict(vect)[0]
+
         if pred == 1:
             st.error("⚠️ This is a SPAM message.")
         else:
