@@ -10,18 +10,19 @@ with open('tfidf_vectorizer.pkl', 'rb') as f:
 with open('svm_model.pkl', 'rb') as f:
     model = pickle.load(f)
 
-# Preprocessing function without NLTK tokenizers
+# Preprocessing function — NO word_tokenize, NO punkt
 def preprocess(text):
     text = text.lower()
     text = re.sub(r"\d+", "", text)
     text = text.translate(str.maketrans("", "", string.punctuation))
-    tokens = text.split()                 # simple whitespace split
+    tokens = text.split()                 # ← simple whitespace split
     stops = set(stopwords.words("english"))
     filtered = [w for w in tokens if w not in stops]
     return " ".join(filtered)
 
 # Streamlit UI
 st.title("📧 Spam Mail Prediction App")
+
 user_input = st.text_area("Enter the email/message text:")
 
 if st.button("Predict"):
@@ -31,7 +32,6 @@ if st.button("Predict"):
         cleaned = preprocess(user_input)
         vect = vectorizer.transform([cleaned]).toarray()
         pred = model.predict(vect)[0]
-
         if pred == 1:
             st.error("⚠️ This is a SPAM message.")
         else:
